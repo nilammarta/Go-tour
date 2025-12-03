@@ -135,6 +135,62 @@ func needFloat(x float64) float64 {
 	return x * 0.1
 }
 
+/*
+PERULANGAN (FOR)
+dalam bahasa Go hanya memiliki 1 perulangan yaitu FOR.
+Syntaxnya yaitu:
+for i:= 0; i < 10; i++{}
+
+tanpa tanda kurung untuk komponen perintah.
+
+JIKA tanpa perintah setelah for, disebut infinity loop,
+seingga untuk keluar dari loop hanya dapat menggunakan break atau return.
+
+contoh penerapan ada di main.
+*/
+
+/*
+KONDISI IF
+Perintah IF tidak harus menggunakan ditutupi dengan tanda kurung
+
+contohnya yaitu:
+*/
+func sqrt(x float64) string {
+	if x < 0 {
+		// sqrt (square root) digunakan untuk menghitung akar kuadrat
+		// (square root) dari sebuah bilangan bertipe float64
+		return sqrt(-x) + "i"
+	}
+	return fmt.Sprint(math.Sqrt(x))
+}
+
+/*
+*
+KONDISI IF SINGKAT
+contohnya:
+*/
+func pow(x, n, lim float64) float64 {
+	// function math.pow digunakan untuk menghitung pangkat
+	if v := math.Pow(x, n); v < lim {
+		return v
+	}
+	return lim
+}
+
+/**
+KONDISI IF-ELSE
+*/
+
+func pow2(x, n, lim float64) float64 {
+	if v := math.Pow(x, n); v < lim {
+		return v
+	} else {
+		fmt.Printf("%g >= %g\n", v, lim)
+	}
+	// v tidak dapat digunakan disini
+	return lim
+}
+
 func main() {
 	// GO TOUR
 	fmt.Println("Hello World!")
@@ -150,7 +206,10 @@ func main() {
 	fmt.Println("Bilangan kesukaan saya adalah", rand.Intn(10))
 
 	// IMPORT
-	// Kalau menggunakan "%variabel" maka menggunakan perintah Printf
+	// Kalau menggunakan "%g" maka menggunakan perintah Printf
+	// %g : digunakan untuk format generik untuk angka floating point
+	// %T : digunakan untuk menampilkan tipe data
+	// %v : digunakan untuk menampilkan nilai default
 	fmt.Printf("Sekarang anda memiliki %g masalah.\n", math.Sqrt(7))
 
 	/**
@@ -212,4 +271,30 @@ func main() {
 	fmt.Println(needInt(Small))
 	fmt.Println(needFloat(Small))
 	fmt.Println(needFloat(Big))
+
+	// PERULANGAN (LOOPING)
+	sum := 0
+	for i := 0; i < 10; i++ {
+		sum += i
+	}
+	fmt.Println(sum)
+	// looping juga dapat dibuat seperti while yaitu sebagai berikut:
+	total := 1
+	for total < 1000 {
+		total += total
+	}
+	fmt.Println(total)
+
+	// KONDISI ("if")
+	fmt.Println(sqrt(2), sqrt(-4))
+	//if singkat
+	fmt.Println(
+		pow(3, 2, 10),
+		pow(3, 3, 20),
+	)
+	// kondisi if else
+	fmt.Println(
+		pow2(3, 2, 10),
+		pow2(3, 3, 20),
+	)
 }
