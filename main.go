@@ -83,6 +83,58 @@ var (
 	z      complex128 = cmplx.Sqrt(-5 + 12i)
 )
 
+/*
+NILAI KOSONG
+
+0 untuk tipe numerik,
+false untuk tipe boolean, dan
+"" (string kosong) untuk string.
+*/
+
+/*
+KONVERSI TIPE
+Ekspresi T(v): artinyta mengkonversi nilai v ke tipe T
+misalnya:
+var i int = 42 || i := 42
+var f float64 = float64(i) ||
+var u uint = uint(f)
+
+contoh di main()
+*/
+
+/*
+INFERENSI TIPE
+misalnya:
+var i int
+j := i // j adalah sebuah int
+
+Namun jika,sisi kakan berupa konstanta numerik, misalnya (3.142) mak tipe data akan berubah menjadi float
+*/
+
+/*
+KONSTANTA
+Konstanta dideklarasikan seperti variabel, tapi dengan kata const.
+Konstanta tidak bisa dideklarasikan dengan sintaks (:=).
+*/
+const Pi = 3.14
+
+/*
+KONSTANTA NUMERIK
+Konstanta numerik adalah nilai dengan presisi-tinggi.
+Konstanta yang tidak bertipe menggunakan tipe yang dibutuhkan sesuai dengan konteksnya.
+*/
+const (
+	Big   = 1 << 100
+	Small = Big >> 99
+)
+
+func needInt(x int) int {
+	return x*10 + 1
+}
+func needFloat(x float64) float64 {
+	return x * 0.1
+}
+
 func main() {
 	// GO TOUR
 	fmt.Println("Hello World!")
@@ -131,4 +183,33 @@ func main() {
 	fmt.Printf("Type: %T Value: %v\n", MaxInt, MaxInt)
 	fmt.Printf("Type: %T Value: %v\n", z, z)
 
+	// NILAI KOSONG
+	var h int
+	var f float64
+	var t bool
+	var s string
+	fmt.Printf("%v %v %v %q\n", h, f, t, s)
+
+	// KONVERSI TIPE
+	var x, y int = 3, 4
+	var l float64 = math.Sqrt(float64(x*x + y*y))
+	var w uint = uint(l)
+	fmt.Println(x, y, w)
+
+	// INFERENSI TIPE
+	o := 3.2890342 // ubahlah nilai v!
+	fmt.Printf("variabel o bertipe %T\n", o)
+
+	// contoh penerapan KONSTANTA
+	const World = "Hola"
+	fmt.Println("Hello", World)
+	fmt.Println("Happy", Pi, "Day")
+
+	const Truth = true
+	fmt.Println("Go rules?", Truth)
+
+	// KONSTANTA NUMERIK
+	fmt.Println(needInt(Small))
+	fmt.Println(needFloat(Small))
+	fmt.Println(needFloat(Big))
 }
