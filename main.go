@@ -1,9 +1,15 @@
+/**
+CARA MENGGUNAKAN DOKUMENTASI INI:
+TINGGAL CARA MATERI YANG PERLU DI CARI
+*/
+
 package main
 
 import (
 	// package fmt : untuk mengontrol input/output
 	"fmt"
 	"math/cmplx"
+	"runtime"
 
 	/**
 	PACKAGE
@@ -177,10 +183,10 @@ func pow(x, n, lim float64) float64 {
 	return lim
 }
 
-/**
+/*
+*
 KONDISI IF-ELSE
 */
-
 func pow2(x, n, lim float64) float64 {
 	if v := math.Pow(x, n); v < lim {
 		return v
@@ -189,6 +195,29 @@ func pow2(x, n, lim float64) float64 {
 	}
 	// v tidak dapat digunakan disini
 	return lim
+}
+
+/*
+*
+LATIHAN LOOPING
+
+	Menghitung hasil pangkat dari inputan dengan
+	10 kali perulangan dan rumus z -= (z * z - x) / (2*z)
+*/
+func Sqrt(x float64) float64 {
+	// Misal nilai awal dari z yaitu 1
+	// z := float64(1)
+
+	// Tebakan awal (boleh angka apa saja, biasanya x itu sendiri atau x/2)
+	z := x
+
+	// Lakukan iterasi beberapa kali agar hasil mendekati √x
+	for i := 0; i < 10; i++ {
+		z = z - (z*z-x)/(2*z)
+	}
+
+	// kembalikan nilai z
+	return z
 }
 
 func main() {
@@ -297,4 +326,74 @@ func main() {
 		pow2(3, 2, 10),
 		pow2(3, 3, 20),
 	)
+
+	/**
+	LATIHAN LOOPING:
+	 Menampilkan hasil dari function Sqrt
+	*/
+	fmt.Println(Sqrt(9))
+
+	/**
+	SWITCH:
+	Perintah switch untuk mempermudah membuat beberapa perintah kondisi if - else.
+	Go akan menjalankan case pertama yang nilainya sama dengan ekspresi kondisi yang diberikan.
+	Perintahnya hampir sama sperti Java, hanya saja pada Go akan menjalankan case yang terpilih, bukan semua case yang
+	ada selanjutnya. Efeknya, perintah break yang biasanya dibutuhkan diakhir setiap case pada bahasa lainnya dibuat
+	secara otomatis oleh Go.
+	*/
+	fmt.Print("Go berjalan pada ")
+	switch os := runtime.GOOS; os {
+	case "darwin":
+		fmt.Println("OS X.")
+	case "linux":
+		fmt.Println("Linux.")
+	default:
+		// freebsd, openbsd,
+		// plan9, windows...
+		fmt.Printf("%s.\n", os)
+	}
+	// Urutan evaluasi "switch" yaitu atas ke bawah, berhenti saat sebuah kondisi sukses.
+	fmt.Println("Kapan hari Sabtu?")
+	today := time.Now().Weekday()
+	fmt.Println(today)
+	fmt.Println(time.Saturday)
+	switch time.Saturday {
+	case today + 0:
+		fmt.Println("Sekarang.")
+	case today + 1:
+		fmt.Println("Besok.")
+	case today + 2:
+		fmt.Println("Dua hari lagi.")
+	default:
+		fmt.Println("Masih jauh.")
+	}
+	// PERINTAH SWITCH tanpa kondisi:
+	time := time.Now()
+	switch {
+	case time.Hour() < 12:
+		fmt.Println("Selamat pagi!")
+	case time.Hour() < 17:
+		fmt.Println("Selamat sore.")
+	default:
+		fmt.Println("Selamat malam.")
+	}
+
+	/**
+	DEFER: perintah yang digunakan untuk menunda eksekusi dari sebuah fungsi
+	sampai fungsi yang melingkupinya selesai.
+
+	Argumen untuk pemanggilan defer dievaluasi langsung, tapi pemanggilan fungsi
+	tidak dieksekusi sampai fungsi yang melingkupinya selesai.
+	*/
+	defer fmt.Println("world")
+	fmt.Println("hello")
+	// Deffer bertumpuk
+	fmt.Println("counting")
+	// Krena ada penundaan panggilan, maka for dieksekusi dengan
+	// urutan last-in-first-out (yang terakhir masuk menjadi pertama keluar).
+	for i := 0; i < 10; i++ {
+		defer fmt.Println(i)
+	}
+
+	fmt.Println("done")
 }
