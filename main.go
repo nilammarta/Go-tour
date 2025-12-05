@@ -220,6 +220,31 @@ func Sqrt(x float64) float64 {
 	return z
 }
 
+/*
+*
+DATA ABSTRAK "STRUCK"
+Sebuah struct adalah kumpulan dari berbagai variabel.
+Syntaxnya yaitu:
+*/
+type Vertex struct {
+	X int
+	Y int
+}
+
+/*
+*
+INISIASI STRUCT
+
+	Sebuah struct bisa dibuat dengan mengisinya dengan nilai bagian-bagiannya.
+	Prefik "&" dapat mengembalikan sebuah pointer ke struct.
+*/
+var (
+	v1       = Vertex{1, 2}  // memiliki tipe Vertex
+	v2       = Vertex{X: 1}  // Y:0 adalah implisit
+	v3       = Vertex{}      // X:0 dan Y:0
+	pointer3 = &Vertex{1, 2} // memiliki tipe *Vertex
+)
+
 func main() {
 	// GO TOUR
 	fmt.Println("Hello World!")
@@ -391,9 +416,77 @@ func main() {
 	fmt.Println("counting")
 	// Krena ada penundaan panggilan, maka for dieksekusi dengan
 	// urutan last-in-first-out (yang terakhir masuk menjadi pertama keluar).
+
+	defer fmt.Println("Ini adalah bagian deffer")
 	for i := 0; i < 10; i++ {
 		defer fmt.Println(i)
 	}
-
 	fmt.Println("done")
+
+	/**
+	POINTER
+		 Sebuah pointer menyimpan alamat dari sebuah nilai pada variabel lain.
+	pointer ini penting karena menghindari penyalinana data besar, dan
+	memodifikasi nilai asli dari suatu variabel dalam fungsi.
+
+	Misal:
+	1) var p *int : tipe *int adalah pointer ke sebuah nilai ke int.
+
+	2) Operator & mengembalikan operan pointer dari variabel:
+		i := 42
+		p = &i
+	3)Operator * dapat mengembalikan nilai yang ditunjuk oleh pointer:
+		fmt.Println(*p) // baca nilai i lewat pointer p
+		*p = 21
+	*/
+	intI, intJ := 42, 2701
+
+	pointer := &intI      // menunjuk ke intI
+	fmt.Println(*pointer) // baca intI lewat pointer
+	*pointer = 21         // set intI lewat pointer
+	fmt.Println(intI)     // lihat nilai terbaru dari intI
+
+	pointer = &intJ          // p menunjuk ke intJ
+	*pointer = *pointer / 37 // bagi nilai intJ lewat pointer
+	fmt.Println(intJ)        // lihat nilai terbaru dari intJ
+
+	/**
+	STRUCT
+	Cara memanggilnya yaitu dengan perintah: nama struct{variabel di dalamnya}
+	*/
+	fmt.Println("STRUCT: ", Vertex{1, 2})
+	// Bagian dari struct diakses menggunakan sebuah titik:
+	vertex := Vertex{1, 2}
+	vertex.X = 4
+	fmt.Println(vertex.X)
+	// Bagaian struct juga dapat diakses dengan pointer.
+	// Untuk mengaksesnya daat dilakukan dengan perintah misalnya pointer p, maka: p.X
+	pointer2 := &vertex
+	pointer2.X = 1e9
+	fmt.Println(vertex)
+	/**
+	INISIASI STRUCT
+	*/
+	fmt.Println(v1, pointer3, v2, v3)
+
+	/**
+	ARRAY
+	1) Penulisan Array dalam Go yaitu: [jumlah_data]tipe_data
+	contoh: var a [10]int
+	*/
+	var array [2]string
+	array[0] = "Hello"
+	array[1] = "World"
+	fmt.Println(array[0], array[1])
+	fmt.Println(array)
+
+	// contoh menambahkan data array:
+	primes := [6]int{2, 3, 5, 7, 11, 13}
+	fmt.Println(primes)
+
+	/**
+	SLICE
+	Sebuah array memiliki ukuran yang tetap. Namun utnuk SLICE dapat memiliki ukuran yug dinamis.
+	
+	*/
 }
