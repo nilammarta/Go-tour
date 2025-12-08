@@ -21,6 +21,8 @@ import (
 
 	// package time : untuk mendapatkan waktu saat ini
 	"time"
+
+	"strings"
 )
 
 /**
@@ -244,6 +246,23 @@ var (
 	v3       = Vertex{}      // X:0 dan Y:0
 	pointer3 = &Vertex{1, 2} // memiliki tipe *Vertex
 )
+
+/*
+*
+Function helper untuk mengetahui panjang dan kapasitas slice.
+*/
+func printSlice(s []int) {
+	fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
+}
+
+/*
+*
+Function helper untuk membuat slice dengan keyword make
+*/
+func printSlice2(s string, x []int) {
+	fmt.Printf("%s len=%d cap=%d %v\n",
+		s, len(x), cap(x), x)
+}
 
 func main() {
 	// GO TOUR
@@ -486,7 +505,139 @@ func main() {
 
 	/**
 	SLICE
-	Sebuah array memiliki ukuran yang tetap. Namun utnuk SLICE dapat memiliki ukuran yug dinamis.
-	
+	Sebuah array memiliki ukuran yang tetap. Namun utnuk SLICE dapat memiliki ukuran dinamis.
+	perintah untuk membuat slice yaitu []tipedata. Diaman sebauh slice, dibentuk dengan
+	memspesifikasikan dua indekjs yaitu batas atas dan batas bawah, seperti var s []int = nama_array[1:4]
+
+	* Catatan: apada arry slice, akan menambahkan nilai dari index batas bawah, tetapi
+	tidak melibatkan bagian terakhir (batas atas)
 	*/
+	arraySlice := [6]int{2, 3, 5, 7, 11, 13}
+	var slice []int = arraySlice[1:4]
+	fmt.Println(slice)
+
+	/**
+	Slice tidak menyimpan data baru, tetapi ia hanya merepresentasikan sebuah bagian dari array
+	Catatan: Mengubah nilai dari elemen dari sebuah slice juga mengubah elemen di array-nya.
+	*/
+	names := [4]string{
+		"John",
+		"Paul",
+		"George",
+		"Ringo",
+	}
+	fmt.Println(names)
+
+	slice1 := names[0:2]
+	slice2 := names[1:3]
+	fmt.Println(slice1, slice2)
+
+	// Mengubah nilai array
+	slice2[0] = "XXX"
+	fmt.Println(slice1, slice2)
+	fmt.Println(names)
+
+	// INISIALISASI SLICE
+	slice3 := []int{2, 3, 5, 7, 11, 13}
+	fmt.Println(slice3)
+
+	slice4 := []bool{true, false, true, true, false, true}
+	fmt.Println(slice4)
+
+	// Tipe Struct berarti mengacu pada array dalam array
+	inisiasiSlice := []struct {
+		i int
+		b bool
+	}{
+		{2, true},
+		{3, false},
+		{5, true},
+		{7, true},
+		{11, false},
+		{13, true},
+	}
+	fmt.Println(inisiasiSlice)
+
+	/**
+	NILAI DEFAULT SLICE
+	nilai defaultnya yaitu 0 untuk batas bawah, dan panjang array utnuk batas atas.
+	*/
+	slice5 := []int{2, 3, 5, 7, 11, 13}
+
+	slice5 = slice5[1:4]
+	fmt.Println(slice5)
+
+	slice5 = slice5[:2]
+	fmt.Println(slice5)
+
+	slice5 = slice5[1:]
+	fmt.Println(slice5)
+
+	/**
+	PANJANG DAN KAPASITAS SLICE
+	panjang slice: jumlah elemen yang dimiliki
+	kapasitas slice: jumlah elemen yang termuat dalam array dihitung dari elemen pertama di dalam slice.
+	Panjang dan kapasitas dari sebuah slice s dapat diambil dengan menggunakan ekspresi len(s) dan cap(s).
+	*/
+	slice6 := []int{2, 3, 5, 7, 11, 13}
+	printSlice(slice6)
+
+	// Potong irisan tersebut hingga panjangnya nol
+	slice6 = slice6[:0]
+	printSlice(slice6)
+
+	// tambahkan panjang arraynya.
+	slice6 = slice6[:4]
+	printSlice(slice6)
+
+	// menghapus 2 value pertama.
+	slice6 = slice6[2:]
+	printSlice(slice6)
+
+	/**
+	SLICE KOSONG
+	Slice yang kosong memiliki panjang dan kapasitas 0, dan tidak memiliki array di dalamnya.
+	Nilai kosong dari slice adalah nil.
+	*/
+	var sliceKosong []int
+	fmt.Println(sliceKosong, len(sliceKosong), cap(sliceKosong))
+	if sliceKosong == nil {
+		fmt.Println("nil!")
+	}
+
+	/**
+	Membuat slice dengan keyword "make"
+	*/
+	aSlice := make([]int, 5)
+	printSlice2("a", aSlice)
+
+	bSlice := make([]int, 0, 5)
+	printSlice2("b", bSlice)
+
+	cSlice := bSlice[:2]
+	printSlice2("c", cSlice)
+
+	dSlice := cSlice[2:5]
+	printSlice2("d", dSlice)
+
+	/**
+	Slice dalam slice
+	*/
+	// Buat papan tic-tac-toe
+	board := [][]string{
+		[]string{"_", "_", "_"},
+		[]string{"_", "_", "_"},
+		[]string{"_", "_", "_"},
+	}
+
+	// Giliran untuk para pemain
+	board[0][0] = "X"
+	board[2][2] = "O"
+	board[1][2] = "X"
+	board[1][0] = "O"
+	board[0][2] = "X"
+
+	for i := 0; i < len(board); i++ {
+		fmt.Printf("%s\n", strings.Join(board[i], " "))
+	}
 }
