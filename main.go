@@ -264,6 +264,8 @@ func printSlice2(s string, x []int) {
 		s, len(x), cap(x), x)
 }
 
+var pow3 = []int{1, 2, 4, 8, 16, 32, 64, 128}
+
 func main() {
 	// GO TOUR
 	fmt.Println("Hello World!")
@@ -623,14 +625,14 @@ func main() {
 	/**
 	Slice dalam slice
 	*/
-	// Buat papan tic-tac-toe
+	// Membuat slice di dalam slice (slice 2 dimensi)
 	board := [][]string{
 		[]string{"_", "_", "_"},
 		[]string{"_", "_", "_"},
 		[]string{"_", "_", "_"},
 	}
 
-	// Giliran untuk para pemain
+	// Memberikan nilai pada slice dalam slice:
 	board[0][0] = "X"
 	board[2][2] = "O"
 	board[1][2] = "X"
@@ -639,5 +641,46 @@ func main() {
 
 	for i := 0; i < len(board); i++ {
 		fmt.Printf("%s\n", strings.Join(board[i], " "))
+	}
+
+	/**
+	Menambahakan elemen ke slice
+	Untuk meanmbahkan data kedalam slcie, maka dapat menggunakan function append().
+	Hasil dari append yaitu sebuah slice yang berisi semua elemen dari slice awal berikut dengan nilai yang ditambahkan.
+	*/
+	var slice7 []int
+	printSlice(slice7)
+
+	// append bekerja pada slice yang nil.
+	slice7 = append(slice7, 0)
+	printSlice(slice7)
+
+	// Slice bertambah satu data.
+	slice7 = append(slice7, 1)
+	printSlice(slice7)
+
+	// Kita juga bisa menambahkan lebih dari satu elemen sekaligus.
+	slice7 = append(slice7, 2, 3, 4)
+	printSlice(slice7)
+
+	/**
+	PERINTAH RANGE
+	Saat melakukan pengulangan dengan range pada slice, dua nilai akan dikembalikan pada setiap iterasi.
+	Nilai pertama yaitu indeks, dan nilai kedua yaitu salinan dari elemen pada indeks tersebut.
+	*/
+	for index, value := range pow3 {
+		fmt.Printf("2**%d = %d\n", index, value)
+	}
+
+	/**
+	Untuk melewati indeks atau nilai dapat menggunakan perintah (_).
+
+	*/
+	pow4 := make([]int, 10)
+	for i := range pow4 {
+		pow4[i] = 1 << uint(i) // == 2**i
+	}
+	for _, value := range pow4 {
+		fmt.Printf("%d\n", value)
 	}
 }
