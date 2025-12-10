@@ -6,6 +6,12 @@ TINGGAL CARA MATERI YANG PERLU DI CARI
 package main
 
 import (
+	"flag"
+	"image"
+	"image/color"
+	"image/png"
+	"os"
+
 	// package fmt : untuk mengontrol input/output
 	"fmt"
 	"math/cmplx"
@@ -265,6 +271,10 @@ func printSlice2(s string, x []int) {
 }
 
 var pow3 = []int{1, 2, 4, 8, 16, 32, 64, 128}
+
+type Vertex struct {
+	Lat, Long float64
+}
 
 func main() {
 	// GO TOUR
@@ -674,7 +684,7 @@ func main() {
 
 	/**
 	Untuk melewati indeks atau nilai dapat menggunakan perintah (_).
-
+	Sehingga yang daitampilkan yaitu data yg dipilih saja
 	*/
 	pow4 := make([]int, 10)
 	for i := range pow4 {
@@ -683,4 +693,84 @@ func main() {
 	for _, value := range pow4 {
 		fmt.Printf("%d\n", value)
 	}
+
+	/**
+	LATIHAN SLICE
+	*/
+	// flags
+	mode := flag.String("mode", "xor", "pilih fungsi gambar: avg, mul, xor")
+	outFile := flag.String("out", "out.png", "nama file output PNG")
+	dx := flag.Int("dx", 256, "lebar gambar (px)")
+	dy := flag.Int("dy", 256, "tinggi gambar (px)")
+	flag.Parse()
+
+	// buat data pixel menggunakan Pic
+	pixels := Pic(*dx, *dy, *mode)
+
+	// buat image.Gray dan isi pixel (gray = uint8)
+	img := image.NewGray(image.Rect(0, 0, *dx, *dy))
+	for y := 0; y < *dy; y++ {
+		for x := 0; x < *dx; x++ {
+			// image.Gray expects color.Gray{Y: value}
+			img.SetGray(x, y, color.Gray{Y: pixels[y][x]})
+		}
+	}
+
+	// tulis ke file PNG
+	file, err := os.Create(*outFile)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "gagal membuat file: %v\n", err)
+		os.Exit(1)
+	}
+	defer file.Close()
+
+	if err := png.Encode(file, img); err != nil {
+		fmt.Fprintf(os.Stderr, "gagal encode png: %v\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("Gambar dibuat: %s (mode=%s, %dx%d)\n", *outFile, *mode, *dx, *dy)
+
+	/**
+	Sebuah map memetakan sebuah kunci (key) dengan nilainya.
+	Nilai kosong dari sebuah map adalah nil.
+	Sebuah map yang nil tidak memiliki kunci, tidak juga dapat ditambahkan kunci baru.
+
+	Fungsi make mengembalikan sebuah map dengan tipenya, diinisialisasi dan siap untuk digunakan.
+	*/
+
+}
+
+// Pic mengembalikan [][]uint8 dengan ukuran dy x dx.
+// Setiap elemen inner slice adalah nilai 0..255 (uint8).
+// mode menentukan fungsi yang dipakai: "avg", "mul", "xor".
+func Pic(dx, dy int, mode string) [][]uint8 {
+	// alokasikan outer slice (dy baris)
+	img := make([][]uint8, dy)
+
+	for y := 0; y < dy; y++ {
+		// alokasikan inner slice (dx kolom) untuk setiap baris
+		row := make([]uint8, dx)
+		for x := 0; x < dx; x++ {
+			var v int
+			switch mode {
+			case "avg":
+				// rata-rata (x+y)/2
+				v = (x + y) / 2
+			case "mul":
+				// perkalian x*y
+				v = x * y
+			case "xor":
+				// operasi XOR bitwise
+				v = x ^ y
+			default:
+				// default ke xor jika mode tidak dikenal
+				v = x ^ y
+			}
+			// konversi ke uint8 sesuai instruksi
+			row[x] = uint8(v)
+		}
+		img[y] = row
+	}
+	return img
 }
